@@ -2,8 +2,13 @@ import React from "react";
 import MTitle from "@components/MTitle";
 import MCard from "@components/MCard";
 import "@src/scss/News.scss";
+import { useSpring, animated } from "@react-spring/web";
 
 export default function News() {
+  const springsSlide = useSpring({
+    from: { x: -1200 },
+    to: { x: 0 },
+  });
   const MTitleList = [
     { title: "新闻资讯", desc: "Information News" },
     { title: "行业动态", desc: "Industry News" },
@@ -72,13 +77,19 @@ export default function News() {
         {/* <MTitle {...MTitleList[0]}></MTitle> */}
         <MTitle {...MTitleList[1]}></MTitle>
         <div className="card-container2">
-          <div className="card-list">
-            {MCardList2.map((item, index) => (
-              <div key={index} className="card-item">
-                <MCard {...item}></MCard>
-              </div>
-            ))}
-          </div>
+          <animated.div
+            style={{
+              ...springsSlide,
+            }}
+          >
+            <div className="card-list">
+              {MCardList2.map((item, index) => (
+                <div key={index} className="card-item">
+                  <MCard {...item}></MCard>
+                </div>
+              ))}
+            </div>
+          </animated.div>
         </div>
       </div>
     </div>

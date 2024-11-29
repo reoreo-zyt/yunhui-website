@@ -10,6 +10,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
+import { useSpring, animated } from "@react-spring/web";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -56,12 +57,23 @@ export default function About() {
   };
   const classes = useStyles();
 
+  const springsSlide = useSpring({
+    from: { x: -1200 },
+    to: { x: 0 },
+  });
+
   return (
     <div className="about">
       <div className="container">
         <MTitle {...MTitleList[0]}></MTitle>
         <div className="card-container">
-          <MCard {...MCardList}></MCard>
+          <animated.div
+            style={{
+              ...springsSlide,
+            }}
+          >
+            <MCard {...MCardList}></MCard>
+          </animated.div>
         </div>
         <MTitle {...MTitleList[1]}></MTitle>
         <div className={classes.list}>

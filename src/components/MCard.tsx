@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 import { useNavigate } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import "@src/scss/MCard.scss";
-import Slide from "./Slide";
+import SimpleImageSlider from "react-simple-image-slider";
 
 MCard.propTypes = () => ({
   maxWidth: {
@@ -67,13 +67,27 @@ export default function MCard({
     // 通知 tab 组件切换
   };
   const images = [
-    "/images/Card1-1.jpg",
-    "/images/Card1-2.jpg",
-    "/images/Card1-3.jpg",
+    {
+      url: "/images/Card1-1.jpg",
+    },
+    {
+      url: "/images/Card1-2.jpg",
+    },
+    {
+      url: "/images/Card1-3.jpg",
+    },
   ];
+  const isMobile = window.innerWidth <= 768;
   return (
     <Card className={classes.root}>
-      <CardActionArea>
+      <CardActionArea
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         {isCardMedia ? (
           <CardMedia
             component="img"
@@ -83,13 +97,21 @@ export default function MCard({
             title={title}
           />
         ) : (
-          <div className="slide">
-            <Slide images={images} intervalTime={5000} />
-          </div>
-          // <div className="card-img">
-          //   <Slide images={images} intervalTime={3000} />
-          //   {/* <img src={imgUrl} alt={imgTitle} title={imgTitle} /> */}
-          // </div>
+          <SimpleImageSlider
+            style={{
+              marginTop: "5px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            width={isMobile ? 400 : 896}
+            height={isMobile ? 270 : 504}
+            images={images}
+            showBullets={true}
+            showNavs={true}
+            autoPlay={true}
+            slideDuration={3}
+          />
         )}
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">

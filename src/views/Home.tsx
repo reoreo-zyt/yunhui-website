@@ -1,6 +1,8 @@
 import React from "react";
 import MTitle from "@components/MTitle";
-import MPaper from "@components/MPaper";
+const MPaper = React.lazy(() => import("@components/MPaper"));
+// import MPaper from "@components/MPaper";
+import { useSpring, animated } from "@react-spring/web";
 import MCard from "@components/MCard";
 import "@src/scss/Home.scss";
 
@@ -88,16 +90,29 @@ export default function Home() {
     },
   ];
 
+  const springsSlide = useSpring({
+    from: { x: -1200 },
+    to: { x: 0 },
+  });
+
   return (
     <div className="about">
       <div className="container">
         <MTitle title={MTitleList[0].title} desc={MTitleList[0].desc}></MTitle>
         <div className="card-container">
-          <MCard {...MCardList}></MCard>
+          <animated.div
+            style={{
+              ...springsSlide,
+            }}
+          >
+            <MCard {...MCardList}></MCard>
+          </animated.div>
         </div>
         <MTitle title={MTitleList[1].title} desc={MTitleList[1].desc}></MTitle>
         <div className="paper-container">
-          <MPaper></MPaper>
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <MPaper></MPaper>
+          </React.Suspense>
         </div>
         <MTitle title={MTitleList[2].title} desc={MTitleList[2].desc}></MTitle>
         <div className="card-container2">

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
+const Paper = React.lazy(() => import("@material-ui/core/Paper"));
+// import Paper from "@material-ui/core/Paper";
 import "@src/scss/MPaper.scss";
 import { useSpring, animated } from "@react-spring/web";
 import Dialog from "@material-ui/core/Dialog";
@@ -60,12 +61,19 @@ export default function MPaper() {
   // 使用useState来控制key值，即重新渲染的触发条件
   // eslint-disable-next-line prefer-const
   let [key, setKey] = useState(0);
+  let [scrollY, setScrollY] = useState(0);
   const springs = useSpring({
     from: { y: 100 },
     to: { y: 0 },
     reset: key === 0 ? false : true, // 当key改变时，重置动画
     // onRest: () => setKey(key + 1), // 当动画结束时，更新key值
   });
+
+  const springsSlide = useSpring({
+    from: { x: -1200 },
+    to: { x: 0 },
+  });
+
   const [images, setImages] = useState([
     {
       alt: "gjdkbjd",
@@ -204,71 +212,82 @@ export default function MPaper() {
     setKey(key);
   };
 
+  window.addEventListener("scroll", () => {
+    setScrollY(window.scrollY);
+    console.log(screenY);
+  });
+
   return (
-    <div>
-      <div className={classes.root}>
-        {images.map((item, index) => (
-          <Paper
-            key={index}
-            className="paper"
-            elevation={3}
-            onMouseEnter={(event) => handleHoverPaper(event, index)}
-            onMouseLeave={(event) => handleLeavePaper(event, index)}
-            onMouseDown={(event) => handleClickOpen(event, index)}
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <animated.div
+        style={{
+          ...springsSlide,
+        }}
+      >
+        <div className={classes.root}>
+          {images.map((item, index) => (
+            <Paper
+              key={index}
+              className="paper"
+              elevation={3}
+              onMouseEnter={(event) => handleHoverPaper(event, index)}
+              onMouseLeave={(event) => handleLeavePaper(event, index)}
+              onMouseDown={(event) => handleClickOpen(event, index)}
+            >
+              <img className="img" alt={item.alt} src={item.src} />
+              {item.show ? (
+                <animated.div className="text" style={{ ...springs }}>
+                  {item.text}
+                </animated.div>
+              ) : !isMobile ? (
+                <div className="text" style={{}}>
+                  {item.text}
+                </div>
+              ) : null}
+            </Paper>
+          ))}
+        </div>
+        {open ? (
+          <Dialog
+            style={open ? { zIndex: 1300 } : { zIndex: -999 }}
+            fullScreen
+            open={open}
+            onClose={handleClose}
+            TransitionComponent={Transition}
           >
-            <img className="img" alt={item.alt} src={item.src} />
-            {item.show ? (
-              <animated.div className="text" style={{ ...springs }}>
-                {item.text}
-              </animated.div>
-            ) : !isMobile ? (
-              <div className="text" style={{}}>
-                {item.text}
+            <AppBar className={classes.appBar}>
+              <Toolbar>
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  onClick={handleClose}
+                  aria-label="close"
+                >
+                  <CloseIcon />
+                </IconButton>
+                <Typography variant="h6" className={classes.title}>
+                  {images[clickIndex].text}
+                </Typography>
+              </Toolbar>
+            </AppBar>
+            <div className={classes.content}>
+              <div className={classes.contentBox}>
+                <PhotoProvider>
+                  {images[clickIndex].details?.imgs.map((item, index) => (
+                    <PhotoView src={item} key={index}>
+                      <img
+                        src={item}
+                        alt=""
+                        style={{ width: "50%", height: "50%" }}
+                      />
+                    </PhotoView>
+                  ))}
+                </PhotoProvider>
               </div>
-            ) : null}
-          </Paper>
-        ))}
-      </div>
-      {open ? (
-        <Dialog
-          style={open ? { zIndex: 1300 } : { zIndex: -999 }}
-          fullScreen
-          open={open}
-          onClose={handleClose}
-          TransitionComponent={Transition}
-        >
-          <AppBar className={classes.appBar}>
-            <Toolbar>
-              <IconButton
-                edge="start"
-                color="inherit"
-                onClick={handleClose}
-                aria-label="close"
-              >
-                <CloseIcon />
-              </IconButton>
-              <Typography variant="h6" className={classes.title}>
-                {images[clickIndex].text}
-              </Typography>
-            </Toolbar>
-          </AppBar>
-          <div className={classes.content}>
-            <div className={classes.contentBox}>
-              <PhotoProvider>
-                {images[clickIndex].details?.imgs.map((item, index) => (
-                  <PhotoView src={item} key={index}>
-                    <img
-                      src={item}
-                      alt=""
-                      style={{ width: "50%", height: "50%" }}
-                    />
-                  </PhotoView>
-                ))}
-              </PhotoProvider>
             </div>
-          </div>
-        </Dialog>
-      ) : null}
-    </div>
+          </Dialog>
+        ) : null}
+      </animated.div>
+    </React.Suspense>
   );
 }
