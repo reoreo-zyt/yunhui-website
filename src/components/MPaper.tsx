@@ -94,23 +94,23 @@ export default function MPaper() {
         ],
       },
     },
-    {
-      alt: "jgjrjz",
-      src: "/images/jgjrjz.png",
-      text: "激光加热基座光学系统",
-      show: false,
-      details: {
-        imgs: [
-          "/images/jgjrjz.png",
-          "/images/jgjrjz-1.png",
-          "/images/jgjrjz-2.png",
-          "/images/jgjrjz-3.png",
-          "/images/jgjrjz-4.png",
-          "/images/jgjrjz-5.png",
-          "/images/jgjrjz-6.png",
-        ],
-      },
-    },
+    // {
+    //   alt: "jgjrjz",
+    //   src: "/images/jgjrjz.png",
+    //   text: "激光加热基座光学系统",
+    //   show: false,
+    //   details: {
+    //     imgs: [
+    //       "/images/jgjrjz.png",
+    //       "/images/jgjrjz-1.png",
+    //       "/images/jgjrjz-2.png",
+    //       "/images/jgjrjz-3.png",
+    //       "/images/jgjrjz-4.png",
+    //       "/images/jgjrjz-5.png",
+    //       "/images/jgjrjz-6.png",
+    //     ],
+    //   },
+    // },
     {
       alt: "kbclk",
       src: "/images/kbclk.png",
@@ -217,7 +217,7 @@ export default function MPaper() {
             onMouseDown={(event) => handleClickOpen(event, index)}
           >
             <img className="img" alt={item.alt} src={item.src} />
-            {/* {item.show ? (
+            {item.show ? (
               <animated.div className="text" style={{ ...springs }}>
                 {item.text}
               </animated.div>
@@ -225,7 +225,7 @@ export default function MPaper() {
               <div className="text" style={{}}>
                 {item.text}
               </div>
-            ) : null} */}
+            ) : null}
           </Paper>
         ))}
       </div>

@@ -95,10 +95,10 @@ export default function Home() {
         <div className="card-container">
           <MCard {...MCardList}></MCard>
         </div>
-        {/* <MTitle title={MTitleList[1].title} desc={MTitleList[1].desc}></MTitle>
+        <MTitle title={MTitleList[1].title} desc={MTitleList[1].desc}></MTitle>
         <div className="paper-container">
           <MPaper></MPaper>
-        </div> */}
+        </div>
         <MTitle title={MTitleList[2].title} desc={MTitleList[2].desc}></MTitle>
         <div className="card-container2">
           <div className="card-list">
