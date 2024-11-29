@@ -217,7 +217,7 @@ export default function MPaper() {
             onMouseDown={(event) => handleClickOpen(event, index)}
           >
             <img className="img" alt={item.alt} src={item.src} />
-            {item.show ? (
+            {/* {item.show ? (
               <animated.div className="text" style={{ ...springs }}>
                 {item.text}
               </animated.div>
@@ -225,7 +225,7 @@ export default function MPaper() {
               <div className="text" style={{}}>
                 {item.text}
               </div>
-            ) : null}
+            ) : null} */}
           </Paper>
         ))}
       </div>
